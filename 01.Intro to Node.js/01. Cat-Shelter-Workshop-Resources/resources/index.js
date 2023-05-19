@@ -1,54 +1,30 @@
-const http = require('http');
-const fs = require('fs/promises');
-const siteCss = require('./content/styles/site');
+const express = require('express');
+const handlebars = require('express-handlebars');
+const path = require('path');
+const app = express();
 
-const cats = [ {
-    id: 1,
-    name: 'Navcho',
-    breed: 'Persian',
-    description: 'Very cute cat'
-},
-{
-    id: 2,
-    name: 'Mishi',
-    breed: 'Angora',
-    description: 'Fluffy'
-},
-{
-    id: 3,
-    name: 'Gary',
-    breed: 'Street cat',
-    description: 'Very angry'
-}]
+app.engine('hbs', handlebars.engine({
+    extname: 'hbs',
+}));
+app.set('view engine', 'hbs');
 
+const bodyParser = express.urlencoded({ extended: false });
+app.use(bodyParser);
 
-const server = http.createServer(async (req, res) => {
+app.use(express.static('public'));
 
-    if(req.url == '/') {
-        const homeHtml = await fs.readFile('./views/home/index.html', 'utf-8');
-        const catHtml = await fs.readFile('./views/cat.html', 'utf-8');
-
-        const catsHtml = cats.map(cat =>  
-            Object.keys(cat).reduce((result, key) => {
-                result = result.replace(`{{${key}}}`, cat[key]);
-                return result;
-            }, catHtml)
-        );
-
-        const homeResult = homeHtml.replace('{{cats}}', catsHtml);
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(homeResult);
-    } else if (req.url == '/styles/site.css') {
-        res.writeHead(200, {'Content-Type': 'text/css'});
-        res.write(siteCss);
-    } else if (req.url == '/cats/add-breed'){ 
-        const addBreedHtml = await fs.readFile('./views/addBreed.html', 'utf-8');
-
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(addBreedHtml);
-    }
-
-    res.end();
+app.get('/', (req, res) => {
+    res.render('home');
 });
 
-server.listen(5000, () => console.log('This server is running on port 5000...'));
+app.get('/cats/add-breed', (req, res) => {
+    res.render('addBreed');
+});
+
+app.get('/cats/add-cat', (req, res) => {
+    res.render('addCat');
+});
+
+app.listen(5000, () => {
+    console.log(`Server is listening on port 5000`);
+});
