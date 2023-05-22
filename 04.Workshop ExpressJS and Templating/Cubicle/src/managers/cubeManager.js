@@ -1,6 +1,5 @@
 const uniqid = require('uniqid');
 const cubes = [];
-
 exports.getAll = () => cubes.slice();
 
 exports.create = (cubeData) => {
@@ -12,5 +11,4 @@ exports.create = (cubeData) => {
     cubes.push(newCube);
 
     return newCube;
-
 }
