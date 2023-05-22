@@ -1,21 +1,15 @@
 const express = require('express');
-const hendlebars = require('express-handlebars');
-const path = require('path');
+
+const expressConfig = require('./config/expressConfig');
+const handlebarsConfig = require('./config/handlebarsConfig');
 
 const app = express();
+
 const PORT = 5000;
 
-//express config
-app.use(express.static(path.resolve(__dirname, 'public')));
-app.use(express.urlencoded({extended: true}));
+expressConfig(app);
+handlebarsConfig(app);
 
-//handlebars setup
-app.engine('hbs', hendlebars.engine({
-    extname: 'hbs',
-  //  layoutsDir: 'src/views/layouts',
-}));
-app.set('view engine', 'hbs');
-app.set('views', 'src/views');
 //routes
 
 app.get('/', (req, res) => {
