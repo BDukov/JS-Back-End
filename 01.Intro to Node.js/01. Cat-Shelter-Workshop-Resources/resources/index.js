@@ -25,6 +25,14 @@ app.get('/cats/add-cat', (req, res) => {
     res.render('addCat');
 });
 
+app.get('/cats/cat-shelter', (req, res) => {
+    res.render('catShelter');
+});
+
+app.get('/cats/edit-cat', (req, res) => {
+    res.render('editCat');
+});
+
 app.listen(5000, () => {
     console.log(`Server is listening on port 5000`);
 });
