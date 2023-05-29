@@ -2,7 +2,7 @@ const Cube = require('../models/Cube');
 const uniqid = require('uniqid');
 
 exports.getAll = async (search, from, to) => {
-    let result = await Cube.find().lean();
+    let result = await Cube.find().lean() ;
 
     //TODO: use mongooose to filter in DB
     if (search) {
