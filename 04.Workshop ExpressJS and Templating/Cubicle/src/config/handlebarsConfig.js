@@ -1,9 +1,8 @@
-const hendlebars = require('express-handlebars');
+const handlebars = require('express-handlebars');
 
-function handlebarsConfig(app){
-    app.engine('hbs', hendlebars.engine({
+function handlebarsConfig(app) {
+    app.engine('hbs', handlebars.engine({
         extname: 'hbs',
-      //  layoutsDir: 'src/views/layouts',
     }));
     app.set('view engine', 'hbs');
     app.set('views', 'src/views');
