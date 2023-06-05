@@ -2,7 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const { v4: uuid } = require('uuid');
 const bcrypt = require('bcrypt');
-const jwt = require('./lib/jwt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const secret = 'alabalasecretstochadura';
@@ -60,35 +60,35 @@ app.post('/login', async (req, res) => {
     const isValid = await bcrypt.compare(password, hash);
 
     if (isValid) {
-        try {
-            const payload = { username };
-            const token = await jwt.sign(payload, secret, { expiresIn: '2d' });
+        const payload = { username };
+        jwt.sign(payload, secret, { expiresIn: '2d' }, (err, token) => {
+            if (err) {
+                return res.redirect('/404');
+            }
 
+            // Set jwt token as cookie
             res.cookie('token', token);
             res.redirect('/profile');
-        } catch (err) {
-            console.log(err);
-            res.redirect('/404');
-        }
+        });
     } else {
         res.status(401).send('Unauthorized');
     }
 });
 
-app.get('/profile', async (req, res) => {
+app.get('/profile', (req, res) => {
     const token = req.cookies['token'];
 
     if (token) {
-        try {
-            const payload = await jwt.verify(token, secret)
+        jwt.verify(token, secret, (err, payload) => {
+            if (err) {
+                return res.status(401).send('Unauthorized');
+            }
 
-            res.send(`Profile: ${payload.username}`);
-        } catch (err) {
-            res.status(401).send('Unauthorized');
-        }
-    } else {
-        res.redirect('/login');
+            return res.send(`Profile: ${payload.username}`);
+        });
     }
+
+    res.redirect('/login');
 });
 
 app.listen(5000, () => console.log('Serrver is listening on port 5000...'));
