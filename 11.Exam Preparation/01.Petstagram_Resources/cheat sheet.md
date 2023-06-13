@@ -59,3 +59,19 @@
     * implement auth middleware
     * attach decodet token to request
     * handle invalid token
+20. Authorization
+21. Dynamic navigation
+    * add conditional in main layout
+    *  add to res locals
+22. Error handling
+    * add 404 page
+    * redirect missing routre to 404
+    * add global error handler (optional)
+    * use gloval error handler after routes (optional)
+    * add error message extractor
+23. Show error notifications
+    * add error container to main layout
+    * show error container conditionaly
+    * pass error to render
+    * add local error handler
+24. Automaticaly login afret register
