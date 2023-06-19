@@ -1,7 +1,10 @@
 const router = require('express').Router();
 
-router.get('/catalog', (req, res) => {
-    res.render('games/catalog');
+const gameManager = require('../managers/gameManager');
+
+router.get('/catalog', async (req, res) => {
+    const games = await gameManager.getAll();
+    res.render('games/catalog', { games });
 });
 
 module.exports = router;
